@@ -10,11 +10,20 @@
     "type": "git",
     "url": "git+https://github.com/vladlearns/raw-vs-rendered-html.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "html diff",
+    "diff"
+    "rawvsrendered",
+  ],
+  "author": "Vladyslav Tkachenko",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/vladlearns/raw-vs-rendered-html/issues"
   },
-  "homepage": "https://github.com/vladlearns/raw-vs-rendered-html#readme"
+  "homepage": "https://github.com/vladlearns/raw-vs-rendered-html#readme",
+  "dependencies": {
+    "diff": "^5.1.0",
+    "jsdom": "^21.0.0",
+    "request": "^2.88.2"
+  }
 }
