@@ -3,22 +3,24 @@ const { JSDOM } = require("jsdom");
 const diff = require("diff");
 const fs = require("fs");
 
-axios.get("https://www.alamy.com/").then((response) => {
-  const dom = new JSDOM(response.data);
-  const renderedHtml = dom.serialize();
-  const rawHtml = response.data;
+axios
+  .get("https://www.wfwfwfwfwfwfw.com/")
+  .then((response) => {
+    const dom = new JSDOM(response.data);
+    const renderedHtml = dom.serialize();
+    const rawHtml = response.data;
 
-  // Split the raw and rendered HTML into arrays of individual tags
-  const rawHtmlTags = rawHtml;
-  const renderedHtmlTags = renderedHtml;
-  let numAddedLines = 0;
-  let numRemovedLines = 0;
+    // Split the raw and rendered HTML into arrays of individual tags
+    const rawHtmlTags = rawHtml;
+    const renderedHtmlTags = renderedHtml;
+    let numAddedLines = 0;
+    let numRemovedLines = 0;
 
-  const diffLines = diff.diffArrays(rawHtmlTags, renderedHtmlTags);
+    const diffLines = diff.diffArrays(rawHtmlTags, renderedHtmlTags);
 
-  fs.writeFileSync(
-    "output.html",
-    `<html>
+    fs.writeFileSync(
+      "output.html",
+      `<html>
     <head>
       <style>
         body {
@@ -145,43 +147,43 @@ axios.get("https://www.alamy.com/").then((response) => {
           <th>Rendered HTML</th>
         </tr>
     `
-  );
+    );
 
-  let i = 0;
-  diffLines.forEach((line) => {
-    let rawOutput = line.value;
-    let renderedOutput = line.value;
-    let rowClass = "";
-    if (line.added) {
-      rawOutput = "";
-      renderedOutput = `<span class="added">++++ ${line.value
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")}</span>`;
-      rowClass = "added";
-      numAddedLines++;
-    } else if (line.removed) {
-      rawOutput = `<span class="removed">--- ${line.value
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")}
+    let i = 0;
+    diffLines.forEach((line) => {
+      let rawOutput = line.value;
+      let renderedOutput = line.value;
+      let rowClass = "";
+      if (line.added) {
+        rawOutput = "";
+        renderedOutput = `<span class="added">++++ ${line.value
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")}</span>`;
+        rowClass = "added";
+        numAddedLines++;
+      } else if (line.removed) {
+        rawOutput = `<span class="removed">--- ${line.value
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")}
 </span>`;
-      renderedOutput = "";
-      rowClass = "removed";
-      numRemovedLines++;
-    }
-    fs.appendFileSync(
-      "output.html",
-      `<tr class="${rowClass}">
+        renderedOutput = "";
+        rowClass = "removed";
+        numRemovedLines++;
+      }
+      fs.appendFileSync(
+        "output.html",
+        `<tr class="${rowClass}">
         <td style="width: 50px">${i}</td>
         <td >${rawOutput.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>
         <td>${renderedOutput.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>
       </tr>`
-    );
-    i++;
-  });
+      );
+      i++;
+    });
 
-  fs.appendFileSync(
-    "output.html",
-    `<div>
+    fs.appendFileSync(
+      "output.html",
+      `<div>
   <div id="show-all" class="text-button" role="button">Show All</div>
   <div id="show-diff" class="text-button" role="button">Show Diff</div>
 </div>
@@ -273,5 +275,9 @@ axios.get("https://www.alamy.com/").then((response) => {
   });
 </script>
 </html>`
-  );
-});
+    );
+  })
+  .catch(function (error) {
+    console.log(error);
+    return Promise.reject(error);
+  });
