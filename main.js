@@ -1,13 +1,12 @@
-const request = require("request");
+const axios = require("axios");
 const { JSDOM } = require("jsdom");
 const diff = require("diff");
 const fs = require("fs");
 
-request("https://www.alamy.com/", (error, response, html) => {
-  const dom = new JSDOM(html);
-
+axios.get("https://www.alamy.com/").then((response) => {
+  const dom = new JSDOM(response.data);
   const renderedHtml = dom.serialize();
-  const rawHtml = html;
+  const rawHtml = response.data;
 
   // Split the raw and rendered HTML into arrays of individual tags
   const rawHtmlTags = rawHtml;
