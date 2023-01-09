@@ -1,3 +1,5 @@
 node_modules
 output.html
 package-lock.json
+.DS_Store
+```
