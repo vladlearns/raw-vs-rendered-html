@@ -87,8 +87,32 @@ request("https://www.alamy.com/", (error, response, html) => {
 
   fs.appendFileSync(
     "output.html",
-    `</table>
+    `<div>
+  <button id="show-all">Show All</button>
+  <button id="show-diff">Show Diff</button>
+</div>
+
+    </table>
     </body>
+    <script>
+  document.getElementById("show-all").addEventListener("click", function () {
+    const rows = document.querySelectorAll("tr");
+    rows.forEach((row) => (row.style.display = "table-row"));
+  });
+
+  document.getElementById("show-diff").addEventListener("click", function () {
+    const rows = document.querySelectorAll("tr");
+    rows.forEach((row) => {
+      if (row.classList.contains("added") || row.classList.contains("removed")) {
+        row.style.display = "table-row";
+      } else {
+        row.style.display = "none";
+      }
+    });
+  });
+
+  </script>
+
     </html>`
   );
 });

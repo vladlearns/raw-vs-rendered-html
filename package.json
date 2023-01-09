@@ -10,11 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/vladlearns/raw-vs-rendered-html.git"
   },
-  "keywords": [
-    "html diff",
-    "diff"
-    "rawvsrendered",
-  ],
+  "keywords": [],
   "author": "Vladyslav Tkachenko",
   "license": "MIT",
   "bugs": {
