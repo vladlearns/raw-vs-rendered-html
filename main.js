@@ -1,7 +1,7 @@
-const axios = require("axios");
-const { JSDOM } = require("jsdom");
-const diff = require("diff");
-const fs = require("fs");
+import axios from "axios";
+import { JSDOM } from "jsdom";
+import * as diff from "diff";
+import fs from "fs";
 
 const rawVsRendered = (link, outputPath) => {
   axios

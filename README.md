@@ -15,7 +15,7 @@ npm install raw-vs-rendered-html
 To use this package, require it in your code and call the rawVsRendered function, passing in a link to the website you want to compare and the desired output path for the resulting HTML file:
 
 ```js
-const rawVsRendered = require("raw-vs-rendered-html");
+import rawVsRendered from "raw-vs-rendered-html";
 rawVsRendered("https://www.alamy.com/", "output.html");
 ```
 
