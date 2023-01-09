@@ -47,12 +47,14 @@ request("https://www.alamy.com/", (error, response, html) => {
 #next {
   position: fixed;
   bottom: 0;
-  left: 10px;
+  left: 40px;
+  font-size: xx-large;
 }
 #prev {
   position: fixed;
   bottom: 0;
   left: 110px;
+  font-size: xx-large;
 }
 
 
@@ -109,8 +111,8 @@ request("https://www.alamy.com/", (error, response, html) => {
     </table>
     </body>
     <div>
-  <button id="prev">⬆️</button>
-  <button id="next">⬇️</button>
+  <div id="prev">⬆️</div>
+  <div id="next">⬇️</div>
 </div>
 
     <script>
