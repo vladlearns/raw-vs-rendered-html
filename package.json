@@ -27,7 +27,6 @@
     "@semantic-release/release-notes-generator": "^10.0.3",
     "axios": "^1.2.2",
     "diff": "^5.1.0",
-    "html-entities": "^2.3.3",
     "i": "^0.3.7",
     "jsdom": "^21.0.0",
     "npm": "^9.2.0"

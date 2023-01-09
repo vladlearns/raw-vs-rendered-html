@@ -2,6 +2,7 @@ import axios from "axios";
 import { JSDOM } from "jsdom";
 import * as diff from "diff";
 import fs from "fs";
+import { decode } from "html-entities";
 
 const rawVsRendered = (link, outputPath) => {
   axios
@@ -11,7 +12,10 @@ const rawVsRendered = (link, outputPath) => {
       const renderedHtml = dom.serialize();
       const rawHtml = response.data;
 
-      const rawHtmlTags = rawHtml;
+      const rawHtmlTags = rawHtml.replace(
+        /&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-fA-F]{1,6});/gi,
+        ""
+      );
       const renderedHtmlTags = renderedHtml;
       let numAddedLines = 0;
       let numRemovedLines = 0;
@@ -283,5 +287,7 @@ const rawVsRendered = (link, outputPath) => {
       return Promise.reject(error);
     });
 };
+
+rawVsRendered("https://www.alamy.com", "output.html");
 
 export default rawVsRendered;
