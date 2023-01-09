@@ -16,7 +16,7 @@ To use this package, require it in your code and call the rawVsRendered function
 
 ```js
 import rawVsRendered from "raw-vs-rendered-html";
-rawVsRendered("https://www.alamy.com/", "output.html");
+rawVsRendered("https://www.example.com/", "output.html");
 ```
 
 The resulting HTML file will contain a table with the raw HTML in one column and the rendered HTML in the other, with added lines highlighted in green and removed lines highlighted in red. There will also be buttons at the bottom of the page to navigate between the differences and a button at the top of the page to toggle between showing all lines and only showing the lines with differences.
