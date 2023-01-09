@@ -350,7 +350,6 @@ exports[`rawVsRendered produces correct output 1`] = `
     currentRow.scrollIntoView({behavior:"smooth"});
   });
 
-  // Add click event listener for the next button
   nextButton.addEventListener("click", function () {
     // If the current row is not set, set it to the first row
     if (!currentRow) {
@@ -375,7 +374,6 @@ exports[`rawVsRendered produces correct output 1`] = `
   const showAllButton = document.getElementById("show-all");
   const showDiffButton = document.getElementById("show-diff");
 
-  // Add click event listener for the show all button
   showAllButton.addEventListener("click", function () {
     // Show all rows
     rows.forEach((row) => {
@@ -383,7 +381,6 @@ exports[`rawVsRendered produces correct output 1`] = `
     });
   });
 
-  // Add click event listener for the show diff button
   showDiffButton.addEventListener("click", function () {
     // Hide all rows that are not added or removed
     rows.forEach((row) => {
