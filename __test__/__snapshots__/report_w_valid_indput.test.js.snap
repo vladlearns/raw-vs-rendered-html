@@ -1,29 +1,7 @@
-import axios from "axios";
-import { JSDOM } from "jsdom";
-import * as diff from "diff";
-import fs from "fs";
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
-const rawVsRendered = async (link, outputPath) => {
-  await axios
-    .get(link)
-    .then((response) => {
-      const dom = new JSDOM(response.data);
-      const renderedHtml = dom.serialize();
-      const rawHtml = response.data;
-
-      const rawHtmlTags = rawHtml.replace(
-        /&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-fA-F]{1,6});/gi,
-        ""
-      );
-      const renderedHtmlTags = renderedHtml;
-      let numAddedLines = 0;
-      let numRemovedLines = 0;
-
-      const diffLines = diff.diffArrays(rawHtmlTags, renderedHtmlTags);
-
-      fs.writeFileSync(
-        "output.html",
-        `<html>
+exports[`rawVsRendered produces correct output 1`] = `
+"<html>
     <head>
       <style>
         body {
@@ -150,49 +128,186 @@ const rawVsRendered = async (link, outputPath) => {
                   <th>Raw HTML</th>
                   <th>Rendered HTML</th>
                 </tr>
-    `
-      );
+    <tr class="">
+        <td style="width: 50px">0</td>
+        <td >&lt;!</td>
+        <td>&lt;!</td>
+      </tr><tr class="removed">
+        <td style="width: 50px">1</td>
+        <td >&lt;span class="removed"&gt;--- doctype
+&lt;/span&gt;</td>
+        <td></td>
+      </tr><tr class="added">
+        <td style="width: 50px">2</td>
+        <td ></td>
+        <td>&lt;span class="added"&gt;++++ DOCTYPE&lt;/span&gt;</td>
+      </tr><tr class="">
+        <td style="width: 50px">3</td>
+        <td > html&gt;</td>
+        <td> html&gt;</td>
+      </tr><tr class="removed">
+        <td style="width: 50px">4</td>
+        <td >&lt;span class="removed"&gt;--- 
 
-      let i = 0;
-      diffLines.forEach((line) => {
-        let rawOutput = line.value;
-        let renderedOutput = line.value;
-        let rowClass = "";
-        if (line.added) {
-          rawOutput = "";
-          renderedOutput = `<span class="added">++++ ${line.value
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")}</span>`;
-          rowClass = "added";
-          numAddedLines++;
-        } else if (line.removed) {
-          rawOutput = `<span class="removed">--- ${line.value
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")}
-</span>`;
-          renderedOutput = "";
-          rowClass = "removed";
-          numRemovedLines++;
+&lt;/span&gt;</td>
+        <td></td>
+      </tr><tr class="">
+        <td style="width: 50px">5</td>
+        <td >&lt;html&gt;</td>
+        <td>&lt;html&gt;</td>
+      </tr><tr class="removed">
+        <td style="width: 50px">6</td>
+        <td >&lt;span class="removed"&gt;--- 
+
+&lt;/span&gt;</td>
+        <td></td>
+      </tr><tr class="">
+        <td style="width: 50px">7</td>
+        <td >&lt;head&gt;
+    &lt;title&gt;Example Domain&lt;/title&gt;
+
+    &lt;meta charset="utf-8"</td>
+        <td>&lt;head&gt;
+    &lt;title&gt;Example Domain&lt;/title&gt;
+
+    &lt;meta charset="utf-8"</td>
+      </tr><tr class="removed">
+        <td style="width: 50px">8</td>
+        <td >&lt;span class="removed"&gt;---  /
+&lt;/span&gt;</td>
+        <td></td>
+      </tr><tr class="">
+        <td style="width: 50px">9</td>
+        <td >&gt;
+    &lt;meta http-equiv="Content-type" content="text/html; charset=utf-8"</td>
+        <td>&gt;
+    &lt;meta http-equiv="Content-type" content="text/html; charset=utf-8"</td>
+      </tr><tr class="removed">
+        <td style="width: 50px">10</td>
+        <td >&lt;span class="removed"&gt;---  /
+&lt;/span&gt;</td>
+        <td></td>
+      </tr><tr class="">
+        <td style="width: 50px">11</td>
+        <td >&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"</td>
+        <td>&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"</td>
+      </tr><tr class="removed">
+        <td style="width: 50px">12</td>
+        <td >&lt;span class="removed"&gt;---  /
+&lt;/span&gt;</td>
+        <td></td>
+      </tr><tr class="">
+        <td style="width: 50px">13</td>
+        <td >&gt;
+    &lt;style type="text/css"&gt;
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
         }
-        fs.appendFileSync(
-          "output.html",
-          `<tr class="${rowClass}">
-        <td style="width: 50px">${i}</td>
-        <td >${rawOutput.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>
-        <td>${renderedOutput.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>
-      </tr>`
-        );
-        i++;
-      });
+    }
+    &lt;/style&gt;    
+&lt;/head&gt;
 
-      fs.appendFileSync(
-        outputPath,
-        `<div>
+&lt;body&gt;
+&lt;div&gt;
+    &lt;h1&gt;Example Domain&lt;/h1&gt;
+    &lt;p&gt;This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.&lt;/p&gt;
+    &lt;p&gt;&lt;a href="https://www.iana.org/domains/example"&gt;More information...&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+</td>
+        <td>&gt;
+    &lt;style type="text/css"&gt;
+    body {
+        background-color: #f0f0f2;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        
+    }
+    div {
+        width: 600px;
+        margin: 5em auto;
+        padding: 2em;
+        background-color: #fdfdff;
+        border-radius: 0.5em;
+        box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);
+    }
+    a:link, a:visited {
+        color: #38488f;
+        text-decoration: none;
+    }
+    @media (max-width: 700px) {
+        div {
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+    &lt;/style&gt;    
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;div&gt;
+    &lt;h1&gt;Example Domain&lt;/h1&gt;
+    &lt;p&gt;This domain is for use in illustrative examples in documents. You may use this
+    domain in literature without prior coordination or asking for permission.&lt;/p&gt;
+    &lt;p&gt;&lt;a href="https://www.iana.org/domains/example"&gt;More information...&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+</td>
+      </tr><tr class="added">
+        <td style="width: 50px">14</td>
+        <td ></td>
+        <td>&lt;span class="added"&gt;++++ 
+
+&lt;/span&gt;</td>
+      </tr><tr class="">
+        <td style="width: 50px">15</td>
+        <td >&lt;/body&gt;</td>
+        <td>&lt;/body&gt;</td>
+      </tr><tr class="removed">
+        <td style="width: 50px">16</td>
+        <td >&lt;span class="removed"&gt;--- 
+
+&lt;/span&gt;</td>
+        <td></td>
+      </tr><tr class="">
+        <td style="width: 50px">17</td>
+        <td >&lt;/html&gt;</td>
+        <td>&lt;/html&gt;</td>
+      </tr><tr class="removed">
+        <td style="width: 50px">18</td>
+        <td >&lt;span class="removed"&gt;--- 
+
+&lt;/span&gt;</td>
+        <td></td>
+      </tr><div>
   <div id="show-all" class="text-button" role="button">Show All</div>
   <div id="show-diff" class="text-button" role="button">Show Diff</div>
 </div>
  <div id="line-count">
-    Added: <span id="num-added">${numAddedLines}</span> | Removed: <span id="num-removed">${numRemovedLines}</span>
+    Added: <span id="num-added">2</span> | Removed: <span id="num-removed">8</span>
 </div>
 <table>
 <tr>
@@ -278,15 +393,5 @@ const rawVsRendered = async (link, outputPath) => {
     });
   });
 </script>
-</html>`
-      );
-    })
-    .catch(function (error) {
-      console.log(error);
-      return Promise.reject(error);
-    });
-};
-
-rawVsRendered("https://www.alamy.com", "output.html");
-
-export default rawVsRendered;
+</html>"
+`;
