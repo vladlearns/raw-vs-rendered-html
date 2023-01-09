@@ -3,35 +3,37 @@ const { JSDOM } = require("jsdom");
 const diff = require("diff");
 const fs = require("fs");
 
-axios
-  .get("https://www.wfwfwfwfwfwfw.com/")
-  .then((response) => {
-    const dom = new JSDOM(response.data);
-    const renderedHtml = dom.serialize();
-    const rawHtml = response.data;
+const rawVsRendered = (link, outputPath) => {
+  axios
+    .get(link)
+    .then((response) => {
+      const dom = new JSDOM(response.data);
+      const renderedHtml = dom.serialize();
+      const rawHtml = response.data;
 
-    // Split the raw and rendered HTML into arrays of individual tags
-    const rawHtmlTags = rawHtml;
-    const renderedHtmlTags = renderedHtml;
-    let numAddedLines = 0;
-    let numRemovedLines = 0;
+      const rawHtmlTags = rawHtml;
+      const renderedHtmlTags = renderedHtml;
+      let numAddedLines = 0;
+      let numRemovedLines = 0;
 
-    const diffLines = diff.diffArrays(rawHtmlTags, renderedHtmlTags);
+      const diffLines = diff.diffArrays(rawHtmlTags, renderedHtmlTags);
 
-    fs.writeFileSync(
-      "output.html",
-      `<html>
+      fs.writeFileSync(
+        "output.html",
+        `<html>
     <head>
       <style>
         body {
           font-family: Arial, sans-serif;
         }
+
         table {
           width: 100%;
           border-collapse: collapse;
           table-layout: fixed;
           word-wrap: break-word;
         }
+
         td, th {
           border: 1px solid #dddddd;
           text-align: left;
@@ -39,151 +41,150 @@ axios
           inline-size: 150px;
           word-break: break-all;
         }
+
         .added {
           background-color: #ddffdd;
           word-break: break-all;
         }
+
         .removed {
           background-color: #ffdddd;
           word-break: break-all;
         }
-#next {
-  position: fixed;
-  bottom: 10%;
-  left: 80px;
-  font-size: xx-large;
-  margin-right: 10px;
-  margin-top: calc(100vh + var(--offset));
-  text-decoration: none;
-  padding: 10px;
-  font-family: sans-serif;
-  color: #fff;
-  background: #000;
-  border-radius: 100px;
-  white-space: nowrap;
-  user-select: none;
-}
-#prev {
-  position: fixed;
-  bottom: 10%;
-  left: 160px;
-  font-size: xx-large;
-  margin-right: 10px;
-  margin-top: calc(100vh + var(--offset));
-  text-decoration: none;
-  padding: 10px;
-  font-family: sans-serif;
-  color: #fff;
-  background: #000;
-  border-radius: 100px;
-  white-space: nowrap;
-  user-select: none;
-}
 
+        #next {
+          position: fixed;
+          bottom: 10%;
+          left: 80px;
+          font-size: xx-large;
+          margin-right: 10px;
+          margin-top: calc(100vh + var(--offset));
+          text-decoration: none;
+          padding: 10px;
+          font-family: sans-serif;
+          color: #fff;
+          background: #000;
+          border-radius: 100px;
+          white-space: nowrap;
+          user-select: none;
+        }
 
+        #prev {
+          position: fixed;
+          bottom: 10%;
+          left: 160px;
+          font-size: xx-large;
+          margin-right: 10px;
+          margin-top: calc(100vh + var(--offset));
+          text-decoration: none;
+          padding: 10px;
+          font-family: sans-serif;
+          color: #fff;
+          background: #000;
+          border-radius: 100px;
+          white-space: nowrap;
+          user-select: none;
+        }
+        .text-button {
+          font-family: "Open Sans", sans-serif;
+          font-size: 16px;
+          letter-spacing: 2px;
+          text-align: center;
+          text-decoration: none;
+          text-transform: uppercase;
+          color: #000;
+          cursor: pointer;
+          border: 3px solid;
+          padding: 0.25em 0.5em;
+          margin: 10px;
+          box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+          position: relative;
+          user-select: none;
+          -webkit-user-select: none;
+          touch-action: manipulation;
+        }
 
+        .text-button:active {
+          box-shadow: 0px 0px 0px 0px;
+          top: 5px;
+          left: 5px;
+        }
 
-.text-button {
-  font-family: "Open Sans", sans-serif;
-  font-size: 16px;
-  letter-spacing: 2px;
-  text-align: center;
-  text-decoration: none;
-  text-transform: uppercase;
-  color: #000;
-  cursor: pointer;
-  border: 3px solid;
-  padding: 0.25em 0.5em;
-  margin: 10px;
-  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
-  position: relative;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-}
+        @media (min-width: 768px) {
+          .text-button {
+            padding: 0.25em 0.75em;
+          }
+        }
+        .top {
+          --offset: 50px;
+          left: 80px;
+          position: sticky;
+          bottom: 20px;
+          margin-right: 10px;
+          place-self: end;
+          margin-top: calc(100vh + var(--offset));
+          text-decoration: none;
+          padding: 10px;
+          font-family: sans-serif;
+          color: #fff;
+          background: #000;
+          border-radius: 100px;
+          white-space: nowrap;
+        }
 
-.text-button:active {
-  box-shadow: 0px 0px 0px 0px;
-  top: 5px;
-  left: 5px;
-}
+        #line-count {
+            position: relative;
+            left: 85%;
+            font-family: sans-serif;
+          }
 
-@media (min-width: 768px) {
-  .text-button {
-    padding: 0.25em 0.75em;
-  }
-}
-.top {
-  --offset: 50px;
-  left: 80px;
-  position: sticky;
-  bottom: 20px;
-  margin-right: 10px;
-  place-self: end;
-  margin-top: calc(100vh + var(--offset));
-  text-decoration: none;
-  padding: 10px;
-  font-family: sans-serif;
-  color: #fff;
-  background: #000;
-  border-radius: 100px;
-  white-space: nowrap;
-}
-#line-count {
-    position: relative;
-    left: 85%;
-    font-family: sans-serif;
-  }
-
-
-
-      </style>
-    </head>
-    <body>
-      <table>
-        <tr>
-          <th class="num-raw" style="width: 50px">#</th>
-          <th>Raw HTML</th>
-          <th>Rendered HTML</th>
-        </tr>
+              </style>
+            </head>
+            <body>
+              <table>
+                <tr>
+                  <th class="num-raw" style="width: 50px">#</th>
+                  <th>Raw HTML</th>
+                  <th>Rendered HTML</th>
+                </tr>
     `
-    );
+      );
 
-    let i = 0;
-    diffLines.forEach((line) => {
-      let rawOutput = line.value;
-      let renderedOutput = line.value;
-      let rowClass = "";
-      if (line.added) {
-        rawOutput = "";
-        renderedOutput = `<span class="added">++++ ${line.value
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")}</span>`;
-        rowClass = "added";
-        numAddedLines++;
-      } else if (line.removed) {
-        rawOutput = `<span class="removed">--- ${line.value
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")}
+      let i = 0;
+      diffLines.forEach((line) => {
+        let rawOutput = line.value;
+        let renderedOutput = line.value;
+        let rowClass = "";
+        if (line.added) {
+          rawOutput = "";
+          renderedOutput = `<span class="added">++++ ${line.value
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")}</span>`;
+          rowClass = "added";
+          numAddedLines++;
+        } else if (line.removed) {
+          rawOutput = `<span class="removed">--- ${line.value
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")}
 </span>`;
-        renderedOutput = "";
-        rowClass = "removed";
-        numRemovedLines++;
-      }
-      fs.appendFileSync(
-        "output.html",
-        `<tr class="${rowClass}">
+          renderedOutput = "";
+          rowClass = "removed";
+          numRemovedLines++;
+        }
+        fs.appendFileSync(
+          "output.html",
+          `<tr class="${rowClass}">
         <td style="width: 50px">${i}</td>
         <td >${rawOutput.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>
         <td>${renderedOutput.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>
       </tr>`
-      );
-      i++;
-    });
+        );
+        i++;
+      });
 
-    fs.appendFileSync(
-      "output.html",
-      `<div>
+      fs.appendFileSync(
+        outputPath,
+        `<div>
   <div id="show-all" class="text-button" role="button">Show All</div>
   <div id="show-diff" class="text-button" role="button">Show Diff</div>
 </div>
@@ -275,9 +276,12 @@ axios
   });
 </script>
 </html>`
-    );
-  })
-  .catch(function (error) {
-    console.log(error);
-    return Promise.reject(error);
-  });
+      );
+    })
+    .catch(function (error) {
+      console.log(error);
+      return Promise.reject(error);
+    });
+};
+
+export default rawVsRendered;
