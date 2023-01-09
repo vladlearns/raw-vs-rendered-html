@@ -12,6 +12,8 @@ request("https://www.alamy.com/", (error, response, html) => {
   // Split the raw and rendered HTML into arrays of individual tags
   const rawHtmlTags = rawHtml;
   const renderedHtmlTags = renderedHtml;
+  let numAddedLines = 0;
+  let numRemovedLines = 0;
 
   const diffLines = diff.diffArrays(rawHtmlTags, renderedHtmlTags);
 
@@ -46,7 +48,7 @@ request("https://www.alamy.com/", (error, response, html) => {
         }
 #next {
   position: fixed;
-  bottom: 60;
+  bottom: 10%;
   left: 80px;
   font-size: xx-large;
   margin-right: 10px;
@@ -62,7 +64,7 @@ request("https://www.alamy.com/", (error, response, html) => {
 }
 #prev {
   position: fixed;
-  bottom: 60;
+  bottom: 10%;
   left: 160px;
   font-size: xx-large;
   margin-right: 10px;
@@ -126,6 +128,11 @@ request("https://www.alamy.com/", (error, response, html) => {
   border-radius: 100px;
   white-space: nowrap;
 }
+#line-count {
+    position: relative;
+    left: 85%;
+    font-family: sans-serif;
+  }
 
 
 
@@ -152,6 +159,7 @@ request("https://www.alamy.com/", (error, response, html) => {
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")}</span>`;
       rowClass = "added";
+      numAddedLines++;
     } else if (line.removed) {
       rawOutput = `<span class="removed">--- ${line.value
         .replace(/</g, "&lt;")
@@ -159,6 +167,7 @@ request("https://www.alamy.com/", (error, response, html) => {
 </span>`;
       renderedOutput = "";
       rowClass = "removed";
+      numRemovedLines++;
     }
     fs.appendFileSync(
       "output.html",
@@ -177,7 +186,11 @@ request("https://www.alamy.com/", (error, response, html) => {
   <div id="show-all" class="text-button" role="button">Show All</div>
   <div id="show-diff" class="text-button" role="button">Show Diff</div>
 </div>
-
+ <div id="line-count">
+    Added: <span id="num-added">${numAddedLines}</span> | Removed: <span id="num-removed">${numRemovedLines}</span>
+</div>
+<table>
+<tr>
     </table>
     </body>
     <div>
