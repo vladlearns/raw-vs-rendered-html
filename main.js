@@ -47,7 +47,7 @@ request("https://www.alamy.com/", (error, response, html) => {
 #next {
   position: fixed;
   bottom: 0;
-  left: 40px;
+  left: 50px;
   font-size: xx-large;
   user-select: none;
 }
@@ -58,6 +58,41 @@ request("https://www.alamy.com/", (error, response, html) => {
   font-size: xx-large;
   user-select: none;
 }
+
+
+
+
+.text-button {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #000;
+  cursor: pointer;
+  border: 3px solid;
+  padding: 0.25em 0.5em;
+  margin: 10px;
+  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.text-button:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
+}
+
+@media (min-width: 768px) {
+  .text-button {
+    padding: 0.25em 0.75em;
+  }
+}
+
 
 
 
@@ -80,12 +115,12 @@ request("https://www.alamy.com/", (error, response, html) => {
     let rowClass = "";
     if (line.added) {
       rawOutput = "";
-      renderedOutput = `<span class="added">+ ${line.value
+      renderedOutput = `<span class="added">++++ ${line.value
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")}</span>`;
       rowClass = "added";
     } else if (line.removed) {
-      rawOutput = `<span class="removed">- ${line.value
+      rawOutput = `<span class="removed">--- ${line.value
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")}
 </span>`;
@@ -106,8 +141,8 @@ request("https://www.alamy.com/", (error, response, html) => {
   fs.appendFileSync(
     "output.html",
     `<div>
-  <button id="show-all">Show All</button>
-  <button id="show-diff">Show Diff</button>
+  <div id="show-all" class="text-button" role="button">Show All</div>
+  <div id="show-diff" class="text-button" role="button">Show Diff</div>
 </div>
 
     </table>
@@ -132,7 +167,7 @@ request("https://www.alamy.com/", (error, response, html) => {
     if (!currentRow) {
       currentRow = rows[0];
       currentRow.style.backgroundColor = "yellow";
-      currentRow.scrollIntoView();
+      currentRow.scrollIntoView({behavior:"smooth"});
       return;
     }
 
@@ -145,7 +180,7 @@ request("https://www.alamy.com/", (error, response, html) => {
     currentRow.style.backgroundColor = "white";
     currentRow = currentRow.previousElementSibling;
     currentRow.style.backgroundColor = "yellow";
-    currentRow.scrollIntoView();
+    currentRow.scrollIntoView({behavior:"smooth"});
   });
 
   // Add click event listener for the next button
@@ -154,7 +189,7 @@ request("https://www.alamy.com/", (error, response, html) => {
     if (!currentRow) {
       currentRow = rows[0];
       currentRow.style.backgroundColor = "yellow";
-      currentRow.scrollIntoView();
+      currentRow.scrollIntoView({behavior:"smooth"});
       return;
     }
 
@@ -167,7 +202,7 @@ request("https://www.alamy.com/", (error, response, html) => {
     currentRow.style.backgroundColor = "white";
     currentRow = currentRow.nextElementSibling;
     currentRow.style.backgroundColor = "yellow";
-    currentRow.scrollIntoView();
+    currentRow.scrollIntoView({behavior:"smooth"});
   });
 
   const showAllButton = document.getElementById("show-all");
