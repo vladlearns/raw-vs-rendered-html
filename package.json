@@ -24,5 +24,8 @@
     "jsdom": "^21.0.0",
     "npm": "^9.2.0",
     "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "prettier": "2.8.2"
   }
 }

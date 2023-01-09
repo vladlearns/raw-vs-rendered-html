@@ -46,16 +46,34 @@ request("https://www.alamy.com/", (error, response, html) => {
         }
 #next {
   position: fixed;
-  bottom: 0;
-  left: 50px;
+  bottom: 60;
+  left: 80px;
   font-size: xx-large;
+  margin-right: 10px;
+  margin-top: calc(100vh + var(--offset));
+  text-decoration: none;
+  padding: 10px;
+  font-family: sans-serif;
+  color: #fff;
+  background: #000;
+  border-radius: 100px;
+  white-space: nowrap;
   user-select: none;
 }
 #prev {
   position: fixed;
-  bottom: 0;
-  left: 110px;
+  bottom: 60;
+  left: 160px;
   font-size: xx-large;
+  margin-right: 10px;
+  margin-top: calc(100vh + var(--offset));
+  text-decoration: none;
+  padding: 10px;
+  font-family: sans-serif;
+  color: #fff;
+  background: #000;
+  border-radius: 100px;
+  white-space: nowrap;
   user-select: none;
 }
 
@@ -92,7 +110,22 @@ request("https://www.alamy.com/", (error, response, html) => {
     padding: 0.25em 0.75em;
   }
 }
-
+.top {
+  --offset: 50px;
+  left: 80px;
+  position: sticky;
+  bottom: 20px;
+  margin-right: 10px;
+  place-self: end;
+  margin-top: calc(100vh + var(--offset));
+  text-decoration: none;
+  padding: 10px;
+  font-family: sans-serif;
+  color: #fff;
+  background: #000;
+  border-radius: 100px;
+  white-space: nowrap;
+}
 
 
 
@@ -148,9 +181,10 @@ request("https://www.alamy.com/", (error, response, html) => {
     </table>
     </body>
     <div>
-  <div id="prev">⬆️</div>
-  <div id="next">⬇️</div>
+  <div id="prev">&#8593;</div>
+  <div id="next">&#8595;</div>
 </div>
+<a href="#" class="top">Back to Top &#8593;</a>
 
     <script>
 
