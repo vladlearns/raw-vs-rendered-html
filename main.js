@@ -235,7 +235,6 @@ const rawVsRendered = async (link, outputPath) => {
     currentRow.scrollIntoView({behavior:"smooth"});
   });
 
-  // Add click event listener for the next button
   nextButton.addEventListener("click", function () {
     // If the current row is not set, set it to the first row
     if (!currentRow) {
@@ -260,7 +259,6 @@ const rawVsRendered = async (link, outputPath) => {
   const showAllButton = document.getElementById("show-all");
   const showDiffButton = document.getElementById("show-diff");
 
-  // Add click event listener for the show all button
   showAllButton.addEventListener("click", function () {
     // Show all rows
     rows.forEach((row) => {
@@ -268,7 +266,6 @@ const rawVsRendered = async (link, outputPath) => {
     });
   });
 
-  // Add click event listener for the show diff button
   showDiffButton.addEventListener("click", function () {
     // Hide all rows that are not added or removed
     rows.forEach((row) => {
