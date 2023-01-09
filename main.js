@@ -49,12 +49,14 @@ request("https://www.alamy.com/", (error, response, html) => {
   bottom: 0;
   left: 40px;
   font-size: xx-large;
+  user-select: none;
 }
 #prev {
   position: fixed;
   bottom: 0;
   left: 110px;
   font-size: xx-large;
+  user-select: none;
 }
 
 
