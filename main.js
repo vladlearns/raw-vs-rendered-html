@@ -4,14 +4,16 @@ const diff = require("diff");
 const fs = require("fs");
 
 request("https://www.alamy.com/", (error, response, html) => {
-  console.log(typeof html);
-
   const dom = new JSDOM(html);
 
   const renderedHtml = dom.serialize();
   const rawHtml = html;
 
-  const diffLines = diff.diffLines(rawHtml, renderedHtml);
+  // Split the raw and rendered HTML into arrays of individual tags
+  const rawHtmlTags = rawHtml;
+  const renderedHtmlTags = renderedHtml;
+
+  const diffLines = diff.diffArrays(rawHtmlTags, renderedHtmlTags);
 
   fs.writeFileSync(
     "output.html",
@@ -42,6 +44,18 @@ request("https://www.alamy.com/", (error, response, html) => {
           background-color: #ffdddd;
           word-break: break-all;
         }
+#next {
+  position: fixed;
+  bottom: 0;
+  left: 10px;
+}
+#prev {
+  position: fixed;
+  bottom: 0;
+  left: 110px;
+}
+
+
 
       </style>
     </head>
@@ -94,25 +108,85 @@ request("https://www.alamy.com/", (error, response, html) => {
 
     </table>
     </body>
+    <div>
+  <button id="prev">⬆️</button>
+  <button id="next">⬇️</button>
+</div>
+
     <script>
-  document.getElementById("show-all").addEventListener("click", function () {
-    const rows = document.querySelectorAll("tr");
-    rows.forEach((row) => (row.style.display = "table-row"));
+
+  const prevButton = document.getElementById("prev");
+  const nextButton = document.getElementById("next");
+  const rows = document.querySelectorAll("tr");
+
+  // Set the current row to null initially
+  let currentRow = null;
+
+  // Add click event listener for the prev button
+  prevButton.addEventListener("click", function () {
+    // If the current row is not set, set it to the first row
+    if (!currentRow) {
+      currentRow = rows[0];
+      currentRow.style.backgroundColor = "yellow";
+      currentRow.scrollIntoView();
+      return;
+    }
+
+    // If the current row is the first row, do nothing
+    if (currentRow === rows[0]) {
+      return;
+    }
+
+    // Otherwise, set the current row to the previous row and scroll to it
+    currentRow.style.backgroundColor = "white";
+    currentRow = currentRow.previousElementSibling;
+    currentRow.style.backgroundColor = "yellow";
+    currentRow.scrollIntoView();
   });
 
-  document.getElementById("show-diff").addEventListener("click", function () {
-    const rows = document.querySelectorAll("tr");
+  // Add click event listener for the next button
+  nextButton.addEventListener("click", function () {
+    // If the current row is not set, set it to the first row
+    if (!currentRow) {
+      currentRow = rows[0];
+      currentRow.style.backgroundColor = "yellow";
+      currentRow.scrollIntoView();
+      return;
+    }
+
+    // If the current row is the last row, do nothing
+    if (currentRow === rows[rows.length - 1]) {
+      return;
+    }
+
+    // Otherwise, set the current row to the next row and scroll to it
+    currentRow.style.backgroundColor = "white";
+    currentRow = currentRow.nextElementSibling;
+    currentRow.style.backgroundColor = "yellow";
+    currentRow.scrollIntoView();
+  });
+
+  const showAllButton = document.getElementById("show-all");
+  const showDiffButton = document.getElementById("show-diff");
+
+  // Add click event listener for the show all button
+  showAllButton.addEventListener("click", function () {
+    // Show all rows
     rows.forEach((row) => {
-      if (row.classList.contains("added") || row.classList.contains("removed")) {
-        row.style.display = "table-row";
-      } else {
+      row.style.display = "table-row";
+    });
+  });
+
+  // Add click event listener for the show diff button
+  showDiffButton.addEventListener("click", function () {
+    // Hide all rows that are not added or removed
+    rows.forEach((row) => {
+      if (!row.classList.contains("added") && !row.classList.contains("removed")) {
         row.style.display = "none";
       }
     });
   });
-
-  </script>
-
-    </html>`
+</script>
+</html>`
   );
 });

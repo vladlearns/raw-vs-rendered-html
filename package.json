@@ -19,7 +19,10 @@
   "homepage": "https://github.com/vladlearns/raw-vs-rendered-html#readme",
   "dependencies": {
     "diff": "^5.1.0",
+    "html-entities": "^2.3.3",
+    "i": "^0.3.7",
     "jsdom": "^21.0.0",
+    "npm": "^9.2.0",
     "request": "^2.88.2"
   }
 }
