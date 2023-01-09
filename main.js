@@ -287,6 +287,4 @@ const rawVsRendered = async (link, outputPath) => {
     });
 };
 
-rawVsRendered("https://www.alamy.com", "output.html");
-
 export default rawVsRendered;
