@@ -1,29 +1,39 @@
-import axios from "axios";
-import { JSDOM } from "jsdom";
+import puppeteer from "puppeteer";
 import * as diff from "diff";
 import fs from "fs";
 
 const rawVsRendered = async (link, outputPath) => {
-  await axios
-    .get(link)
-    .then((response) => {
-      const dom = new JSDOM(response.data);
-      const renderedHtml = dom.serialize();
-      const rawHtml = response.data;
+  const browser = await puppeteer.launch();
 
-      const rawHtmlTags = rawHtml.replace(
-        /&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-fA-F]{1,6});/gi,
-        ""
-      );
-      const renderedHtmlTags = renderedHtml;
-      let numAddedLines = 0;
-      let numRemovedLines = 0;
+  const page = await browser.newPage();
+  await page.setUserAgent(
+    "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+  );
 
-      const diffLines = diff.diffArrays(rawHtmlTags, renderedHtmlTags);
+  let rawHtml;
+  const intercept = async (response) => {
+    page.off("response", intercept);
+    rawHtml = await response.text();
+  };
 
-      fs.writeFileSync(
-        "output.html",
-        `<html>
+  page.on("response", intercept);
+
+  await page.goto(link, { waitUntil: "networkidle2", timeout: 0 });
+  const renderedHtml = await page.content();
+
+  browser.close();
+
+  let numAddedLines = 0;
+  let numRemovedLines = 0;
+
+  const diffLines = diff.diffArrays(
+    rawHtml.split(/<[^>]+>/),
+    renderedHtml.split(/<[^>]+>/)
+  );
+
+  fs.writeFileSync(
+    "output.html",
+    `<html>
     <head>
       <style>
         body {
@@ -151,43 +161,40 @@ const rawVsRendered = async (link, outputPath) => {
                   <th>Rendered HTML</th>
                 </tr>
     `
-      );
+  );
 
-      let i = 0;
-      diffLines.forEach((line) => {
-        let rawOutput = line.value;
-        let renderedOutput = line.value;
-        let rowClass = "";
-        if (line.added) {
-          rawOutput = "";
-          renderedOutput = `<span class="added">++++ ${line.value
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")}</span>`;
-          rowClass = "added";
-          numAddedLines++;
-        } else if (line.removed) {
-          rawOutput = `<span class="removed">--- ${line.value
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")}
+  let i = 0;
+
+  diffLines.forEach((line) => {
+    let rawOutput = line.value;
+    let renderedOutput = line.value;
+    let rowClass = "";
+    if (line.added) {
+      rawOutput = "";
+      renderedOutput = `<span class="added">++++ ${line.value}</span>`;
+      rowClass = "added";
+      numAddedLines++;
+    } else if (line.removed) {
+      rawOutput = `<span class="removed">--- ${line.value}
 </span>`;
-          renderedOutput = "";
-          rowClass = "removed";
-          numRemovedLines++;
-        }
-        fs.appendFileSync(
-          "output.html",
-          `<tr class="${rowClass}">
+      renderedOutput = "";
+      rowClass = "removed";
+      numRemovedLines++;
+    }
+    fs.appendFileSync(
+      "output.html",
+      `<tr class="${rowClass}">
         <td style="width: 50px">${i}</td>
-        <td >${rawOutput.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>
-        <td>${renderedOutput.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>
+        <td >${rawOutput}</td>
+        <td>${renderedOutput}</td>
       </tr>`
-        );
-        i++;
-      });
+    );
+    i++;
+  });
 
-      fs.appendFileSync(
-        outputPath,
-        `<div>
+  fs.appendFileSync(
+    outputPath,
+    `<div>
   <div id="show-all" class="text-button" role="button">Show All</div>
   <div id="show-diff" class="text-button" role="button">Show Diff</div>
 </div>
@@ -276,12 +283,8 @@ const rawVsRendered = async (link, outputPath) => {
   });
 </script>
 </html>`
-      );
-    })
-    .catch(function (error) {
-      console.log(error);
-      return Promise.reject(error);
-    });
+  );
 };
+rawVsRendered("https://www.alamy.com", "output.html");
 
 export default rawVsRendered;
